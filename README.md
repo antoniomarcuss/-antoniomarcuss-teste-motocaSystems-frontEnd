@@ -22,59 +22,6 @@ Marcus
 
 Para acessar a aplicação, siga estas instruções:
 
-Execute npm install para instalar todas as dependências necessárias.
-Certifique-se de criar um arquivo db.json na raiz do projeto e cole os dados da API fornecidos abaixo:
-json
-Copiar código
-{
-"motos": [
-{
-"id": "1",
-"code": "#0001",
-"model": "Honda pop 1101",
-"color": "branca",
-"price": "15.000,00",
-"status": {
-"id": "1",
-"name": "Em estoque"
-}
-},
-{
-"id": "2",
-"code": "#0002",
-"model": "honda 500x",
-"color": "vermelha",
-"price": "50.000,00",
-"status": {
-"id": "2",
-"name": "Sem estoque"
-}
-},
-{
-"id": "3",
-"code": "#0003",
-"model": "honda cb 300f twister",
-"color": "preta",
-"price": "30.000,00",
-"status": {
-"id": "3",
-"name": "Em trânsito"
-}
-}
-],
-"status": [
-{
-"id": "1",
-"name": "Em estoque"
-},
-{
-"id": "2",
-"name": "Sem estoque"
-},
-{
-"id": "3",
-"name": "Em trânsito"
-}
-]
-}
-Certifique-se de ajustar as configurações do seu ambiente local conforme necessário para garantir que a aplicação funcione corretamente.
+- npm install para instalar todas as dependências
+- Endereço do servidor: http://localhost:5000
+- Porta: 5000
