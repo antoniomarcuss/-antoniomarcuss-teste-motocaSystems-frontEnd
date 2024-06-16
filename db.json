@@ -1,0 +1,51 @@
+{
+  "motos": [
+    {
+      "id": "1",
+      "code": "#0001",
+      "model": "Honda pop 1101",
+      "color": "branca",
+      "price": "15.000,00",
+      "status": {
+        "id": 1,
+        "name": "Em estoque"
+      }
+    },
+    {
+      "id": "2",
+      "code": "#0002",
+      "model": "honda 500x",
+      "color": "vermelha",
+      "price": "50.000,00",
+      "status": {
+        "id": 2,
+        "name": "Sem estoque"
+      }
+    },
+    {
+      "id": "3",
+      "code": "#0003",
+      "model": "honda cb 300f twister",
+      "color": "preta",
+      "price": "30.000,00",
+      "status": {
+        "id": 3,
+        "name": "Em trânsito"
+      }
+    }
+  ],
+  "status": [
+    {
+      "id": "1",
+      "name": "Em estoque"
+    },
+    {
+      "id": "2",
+      "name": "Sem estoque"
+    },
+    {
+      "id": "3",
+      "name": "Em trânsito"
+    }
+  ]
+}
