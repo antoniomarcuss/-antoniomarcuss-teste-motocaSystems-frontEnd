@@ -15,11 +15,15 @@ const useFormCard = (motorcycleId) => {
   const navigate = useNavigate();
 
   const queryClient = useQueryClient();
+
   const { data: dataId, refetch: refetchDataId } = useQuery({
     queryKey: ["motorcycles", motorcycleId],
     queryFn: () => RequestsServices.findById(motorcycleId),
     refetchOnMount: false,
     enabled: !!motorcycleId,
+    onError: () => {
+      setError("root", { message: "Não foi possível obter os dados!" });
+    },
   });
   const { data: dataStatus } = useQuery({
     queryKey: "status",
@@ -37,7 +41,6 @@ const useFormCard = (motorcycleId) => {
     const selectedStatus = statusOptions.find(
       (status) => Number(status.id) === Number(formData.status)
     );
-    console.log(selectedStatus);
 
     if (!selectedStatus) {
       setError("status", { message: "Status selecionado é inválido" });
@@ -55,14 +58,15 @@ const useFormCard = (motorcycleId) => {
 
     try {
       if (motorcycleId) {
-        const res = await RequestsServices.update(motorcycleId, body);
-        console.log(res);
-        queryClient.refetchQueries("motorcycles");
+        await RequestsServices.update(motorcycleId, body);
+
+        queryClient.refetchQueries(["motorcycles", motorcycleId]);
+
         navigate("/");
         return;
       }
       const create = await RequestsServices.create(body);
-      console.log(create.data);
+
       queryClient.setQueryData("motorcycles", (oldData) => {
         return {
           ...oldData,

@@ -23,5 +23,6 @@ Marcus
 Para acessar a aplicação, siga estas instruções:
 
 - npm install para instalar todas as dependências
+- No servidor use npm run server
 - Endereço do servidor: http://localhost:5000
 - Porta: 5000

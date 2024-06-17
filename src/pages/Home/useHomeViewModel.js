@@ -1,14 +1,13 @@
 import { useEffect, useState } from "react";
-import { useMutation, useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { RequestsServices } from "../../services/requests";
 
 const useHomeViewModel = () => {
   const [itemsFiltered, setItemFiltered] = useState([]);
-
+  const queryClient = useQueryClient();
   const { data, isLoading, refetch } = useQuery({
     queryKey: ["motorcycles"],
     queryFn: RequestsServices.find,
-    refetchOnMount: false,
   });
 
   useEffect(() => {
@@ -33,6 +32,7 @@ const useHomeViewModel = () => {
   const deleteMutation = useMutation(RequestsServices.delete, {
     onSuccess: () => {
       refetch();
+      queryClient.invalidateQueries("motorcycles");
     },
   });
 
