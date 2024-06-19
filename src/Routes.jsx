@@ -10,7 +10,6 @@ import Layout from "./pages/components/Layout";
 import Edit from "./pages/Home/Edit";
 import Register from "./pages/Home/Register";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { ReactQueryDevtools } from "react-query/devtools";
 
 const browserRouter = createBrowserRouter(
   createRoutesFromElements(
@@ -25,7 +24,6 @@ function Routes() {
   const queryClient = new QueryClient();
   return (
     <QueryClientProvider client={queryClient}>
-      <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
       <RouterProvider router={browserRouter} />
     </QueryClientProvider>
   );
