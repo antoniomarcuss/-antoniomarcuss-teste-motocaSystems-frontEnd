@@ -3,7 +3,7 @@ import ItemsSearchForm from "./components/ItemsSearchForm";
 import { Link } from "react-router-dom";
 import useHomeViewModel from "./useHomeViewModel";
 const Home = () => {
-  const { itemsFiltered, isLoading, filteredValue, removeCard } =
+  const { itemsFiltered, isLoading, isError, filteredValue, removeCard } =
     useHomeViewModel();
   return (
     <div>
@@ -16,11 +16,14 @@ const Home = () => {
 
       <ItemsCard itemsFiltered={itemsFiltered} removeCard={removeCard} />
       {isLoading && (
-        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
-          <div className="text-white text-xl">
-            Carregando{" "}
-            <span className="animate-ping text-3xl tracking-widest">...</span>
-          </div>
+        <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center">
+          <img className="animate-spin w-10" src="/loading.svg" alt="loading" />
+        </div>
+      )}
+
+      {isError && (
+        <div className="flex justify-center min-h-80 mt-10">
+          <p className="text-red-400 text-lg">Erro ao carregar os dados</p>
         </div>
       )}
     </div>

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { RequestsServices } from "../../../../services/requests";
-import { useQuery, useQueryClient } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
@@ -16,26 +16,51 @@ const useFormCard = (motorcycleId) => {
 
   const queryClient = useQueryClient();
 
-  const { data: dataId, refetch: refetchDataId } = useQuery({
+  const { isLoading: isLoadingEdit, isError: isErrorEdit } = useQuery({
     queryKey: ["motorcycles", motorcycleId],
     queryFn: () => RequestsServices.findById(motorcycleId),
-    refetchOnMount: false,
     enabled: !!motorcycleId,
+    onSuccess: (data) => {
+      reset({
+        ...data.data,
+        status: data.data.status.id.toString(),
+      });
+    },
     onError: () => {
       setError("root", { message: "Não foi possível obter os dados!" });
     },
   });
+
   const { data: dataStatus } = useQuery({
     queryKey: "status",
     queryFn: RequestsServices.getStatus,
-    refetchOnMount: false,
+    staleTime: 1000 * 60 * 5,
+    onSuccess: (data) => {
+      setStatusOptions(data.data);
+    },
   });
 
   useEffect(() => {
-    if (dataStatus) {
+    if (dataStatus && dataStatus.data) {
       setStatusOptions(dataStatus.data);
     }
   }, [dataStatus]);
+
+  const mutation = useMutation({
+    mutationFn: (data) => {
+      if (motorcycleId) {
+        return RequestsServices.update(motorcycleId, data);
+      }
+      return RequestsServices.create(data);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries("motorcycles");
+      navigate("/");
+    },
+    onError: () => {
+      setError("root", { message: "Não foi possível salvar os dados!" });
+    },
+  });
 
   const handleSubmitForm = async (formData) => {
     const selectedStatus = statusOptions.find(
@@ -56,49 +81,14 @@ const useFormCard = (motorcycleId) => {
       status: statusObject,
     };
 
-    try {
-      if (motorcycleId) {
-        await RequestsServices.update(motorcycleId, body);
-
-        queryClient.refetchQueries(["motorcycles", motorcycleId]);
-
-        navigate("/");
-        return;
-      }
-      const create = await RequestsServices.create(body);
-
-      queryClient.setQueryData("motorcycles", (oldData) => {
-        return {
-          ...oldData,
-          data: [...oldData.data, create.data],
-        };
-      });
-      queryClient.invalidateQueries("motorcycles");
-      navigate("/");
-    } catch ({ response }) {
-      !response.ok &&
-        setError("root", { message: "Não foi possível criar os dados!" });
-    }
+    mutation.mutate(body);
   };
-
-  useEffect(() => {
-    if (dataId && dataId.data) {
-      reset({
-        ...dataId.data,
-        status: dataId.data.status.id.toString(),
-      });
-    }
-  }, [dataId, reset]);
-
-  useEffect(() => {
-    if (motorcycleId) {
-      refetchDataId();
-    }
-  }, [motorcycleId, refetchDataId]);
 
   return {
     register,
     handleSubmit,
+    isErrorEdit,
+    isLoadingEdit,
     setValue,
     formState,
     statusOptions,
